@@ -3,9 +3,24 @@ const {MOVIE_MODEL} = require("../models");
 const addMovie = async (req, res) => {
     const { title, genre, releaseDate, language, revenue } = req.body;
     try {
+        await MOVIE_MODEL.create({ title, genre, releaseDate, language, revenue })
         const newMovie = new MOVIE_MODEL({ title, genre, releaseDate, language, revenue });
-        await newMovie.save();
-        res.status(201).json(newMovie);
+         newMovie.save().then((newMovie) => {
+             return res.status(201).json(newMovie);
+         }).catch(err => {
+             return  res.status(500).json({ error: error.message });
+         })
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+const addBulkMovie = async (req, res) => {
+    const movies = req.body.movies;
+    try {
+        const newMovies = await MOVIE_MODEL.insertMany(movies);
+        return res.status(201).json(newMovies);
     } catch (error) {
 
     }
@@ -16,7 +31,7 @@ const updateMovieDetails = async (req,res) => {
         const updateObj = req.body;
         const movieId = req.params.id;
         await MOVIE_MODEL.findOneAndUpdate({_id : movieId},{$set : updateObj}).exec();
-        res.status(200).json({msg : 'Movie Details Updated!'});
+        return  res.status(200).json({msg : 'Movie Details Updated!'});
     }catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -33,4 +48,4 @@ const getAllMovies = async (req,res) => {
 
 }
 
-module.exports = {addMovie,updateMovieDetails, getAllMovies};
+module.exports = {addMovie,updateMovieDetails, getAllMovies, addBulkMovie};

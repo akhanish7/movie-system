@@ -24,7 +24,7 @@ function initializeMiddlewares(app){
 async function start(app) {
     try{
         await connectToMongoDb();
-        initializeMiddlewares(app);
+        await initializeMiddlewares(app);
         await app.listen(PORT);
         return `Server running on port ${PORT}`;
     }

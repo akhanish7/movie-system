@@ -13,7 +13,8 @@ const movieSchema = new mongoose.Schema(
             enum : movieGenre
         },
         language : {
-            type : movieLanguages,
+            type : String,
+            enum : movieLanguages,
             required : true
         },
         releaseDate : {

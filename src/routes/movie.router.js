@@ -1,8 +1,9 @@
 const express = require('express');
-const {addMovie} = require("../controller/movie.controller");
+const {addMovie, addBulkMovie} = require("../controller/movie.controller");
 const movieRouter = express.Router();
 
-movieRouter.post('/movies', addMovie);
+movieRouter.post('/add', addMovie);
+movieRouter.post('/bulk-add', addBulkMovie);
 
 
 module.exports = movieRouter;
