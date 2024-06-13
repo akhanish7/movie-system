@@ -9,7 +9,7 @@ let expressApp = express();
 
 app.start(expressApp)
     .then((data) => {
-        console.log(data);
+        console.info(data);
     })
     .catch((err) => {
         console.error(err);
