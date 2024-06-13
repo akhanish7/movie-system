@@ -1,0 +1,1 @@
+exports.MOVIE_MODEL = require('./movie.scheme');
