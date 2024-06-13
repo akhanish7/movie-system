@@ -1,4 +1,5 @@
 const {MOVIE_MODEL} = require("../models");
+const moment = require('moment');
 
 const addMovie = async (req, res) => {
     const { title, genre, releaseDate, language, revenue } = req.body;
@@ -50,4 +51,35 @@ const getAllMovies = async (req,res) => {
     }
 }
 
-module.exports = {addMovie,updateMovieDetails, getAllMovies, addBulkMovie};
+const getTopMovies = async (req,res) => {
+try{
+    const { genre, year, month, language } = req.query;
+    let {limit} = req.query;
+    if(!limit) limit=10;
+    const filters = {};
+    if (genre) filters.genre = genre;
+    if (year && !month) {
+        const startOfYear = moment(year, 'YYYY').startOf('year').toDate();
+        const endOfYear = moment(year, 'YYYY').endOf('year').toDate();
+        filters.releaseDate = {
+            $gte: startOfYear,
+            $lte: endOfYear
+        };
+    }
+    if (year && month) {
+        const startOfMonth = moment(`${year}-${month}`, 'YYYY-MM').startOf('month').toDate();
+        const endOfMonth = moment(`${year}-${month}`, 'YYYY-MM').endOf('month').toDate();
+        filters.releaseDate = {
+            $gte: startOfMonth,
+            $lte: endOfMonth
+        };
+    }
+    if (language) filters.language = language;
+    const movies = await MOVIE_MODEL.find(filters).sort({ revenue: -1 }).limit(limit);
+    return res.json(movies);
+}
+catch (error) {
+    res.status(500).json({ error: error.message });
+}
+}
+module.exports = {addMovie,updateMovieDetails, getAllMovies, addBulkMovie, getTopMovies};
