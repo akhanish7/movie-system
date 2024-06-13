@@ -7,7 +7,7 @@ const addMovie = async (req, res) => {
         const newMovie = new MOVIE_MODEL({ title, genre, releaseDate, language, revenue });
          newMovie.save().then((newMovie) => {
              return res.status(201).json(newMovie);
-         }).catch(err => {
+         }).catch(error => {
              return  res.status(500).json({ error: error.message });
          })
 
@@ -19,8 +19,11 @@ const addMovie = async (req, res) => {
 const addBulkMovie = async (req, res) => {
     const movies = req.body.movies;
     try {
-        const newMovies = await MOVIE_MODEL.insertMany(movies);
-        return res.status(201).json(newMovies);
+        MOVIE_MODEL.insertMany(movies).then((newMovie) => {
+            return res.status(201).json(newMovie);
+        }).catch(error => {
+            return  res.status(500).json({ error: error.message });
+        })
     } catch (error) {
 
     }
@@ -45,7 +48,6 @@ const getAllMovies = async (req,res) => {
     }catch (error) {
         res.status(500).json({ error: error.message });
     }
-
 }
 
 module.exports = {addMovie,updateMovieDetails, getAllMovies, addBulkMovie};

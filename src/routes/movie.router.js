@@ -4,6 +4,7 @@ const movieRouter = express.Router();
 
 movieRouter.post('/add', addMovie);
 movieRouter.post('/bulk-add', addBulkMovie);
+movieRouter.get('/', addBulkMovie);
 
 
 module.exports = movieRouter;
