@@ -1,6 +1,7 @@
 const express = require('express')
 const {connectToMongoDb} = require("./utils/app.utils");
 const mainRouter = require("./routes");
+const cors = require('cors');
 const {json} = require("body-parser");
 
 const env = process.env;
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 3000;
 
 function initializeMiddlewares(app){
     // Middleware
+    app.use(cors());
     app.use(json());
     app.use('/',mainRouter);
 }
