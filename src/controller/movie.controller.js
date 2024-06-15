@@ -4,7 +4,6 @@ const moment = require('moment');
 const addMovie = async (req, res) => {
     const { title, genre, releaseDate, language, revenue } = req.body;
     try {
-        await MOVIE_MODEL.create({ title, genre, releaseDate, language, revenue })
         const newMovie = new MOVIE_MODEL({ title, genre, releaseDate, language, revenue });
          newMovie.save().then((newMovie) => {
              return res.status(201).json(newMovie);
